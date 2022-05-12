@@ -123,7 +123,7 @@ class SAT_Solveur:
             #On ajoute au cases, les 2 premiers indices du deuxieme ligne
             cases.append([3, 4])
             cases.append([4, 6])
-
+            max = 6
             #On ajoute le reste des indices du deuxieme ligne
             for _ in range(2, dimension):
 
