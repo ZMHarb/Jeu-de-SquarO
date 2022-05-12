@@ -80,3 +80,10 @@ Options:
   ./main.py -d 5 -m autosolve
 ```
 ![image](https://user-images.githubusercontent.com/105078630/168067362-3416d701-3f77-48b8-8300-63bfe4ecea01.png)
+
+
+
+```bash
+  ./main.py -d 2 -m play
+```
+![image](https://user-images.githubusercontent.com/105078630/168068997-e906b631-80c0-4aee-9355-b34745802276.png)
