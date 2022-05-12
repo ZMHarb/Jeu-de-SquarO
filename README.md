@@ -79,3 +79,4 @@ Options:
 ```bash
   ./main.py -d 5 -m autosolve
 ```
+![image](https://user-images.githubusercontent.com/105078630/168067362-3416d701-3f77-48b8-8300-63bfe4ecea01.png)
