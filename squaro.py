@@ -57,139 +57,144 @@ class Squaro:
         #Pour verifier si le tableau est résoluble. Sinon, on sort du programme
         self.check_tableau_res()
 
-    '''
-    Une fonction qui permette à ecrire le DIMACS du probleme dans un fichier
-    '''
     def ecrire_DIMACS(self):
-
+        '''
+        Une fonction qui permette à ecrire le DIMACS du probleme dans un fichier
+        '''
         self.solver.ecrire_DIMACS(self.dimension, self.tableau, self.fichier_dimacs)
         print(f"\n*** Le format DIMACS du probleme est ecrite dans le fichier {self.fichier_dimacs} ***\n\n")
 
-    '''
-    Une fonction qui permette de vérifier si le tableau du jeu est résoluble ou pas
-    '''
+
     def check_tableau_res(self):
-        
+        '''
+        Une fonction qui permette de vérifier si le tableau du jeu est résoluble ou pas
+        '''        
         #Passer le fichier DIMACS généré au SAT Solveur
         res = self.solver.solve_SAT(self.fichier_dimacs)
         if not res:
             print("\n\nLe tableau donné n'est pas résoluble\n")
             exit(1)
 
-    '''
-    Une fonction qui permette à générer les 'n' premiers lettres d'Alphabet, utilisées pour faciliter le choix des cases au joueur
-    '''
     def generer_top_line(self):
-        
+        '''
+        Une fonction qui permette à générer les 'n' premiers lettres d'Alphabet, utilisées pour faciliter le choix des cases au joueur
+        '''                
         top_line = list(string.ascii_uppercase[:self.dimension+1])
         
         return top_line
 
-    '''
-    Une fonction qui permette à afficher le tableau
-    '''
+
     def afficher_tableau(self, n):
-      
-      k = iter(range(1, n+2))
-      
-      print("    " + "   ".join(self.top_line))
+        '''
+        Une fonction qui permette d'afficher le tableau
+        '''      
+        k = iter(range(1, n+2))
+        
+        print("    " + "   ".join(self.top_line))
 
-      for i in range(n):
-          
-          print('{:2d}'.format(next(k)), end="  ")
+        for i in range(n):
+            
+            print('{:2d}'.format(next(k)), end="  ")
 
-          for j in range(n):
-              #Si une case ne verifie pas les conditions du jeu, ses coins seront affichés en Rouge
-              if [i, j] in self.erreure:
-                  print(f"{Fore.RED}●{Fore.RESET}---", end="")
-              #Si un coin d'case est choisie par le joueur, et n'est pas une case erreure, sera affiché en Vert
-              elif [i, j] in self.choix:
-                  print(f"{Fore.GREEN}●{Fore.RESET}---", end="")
-              #Les coins normaux
-              else:
-                  print("O---", end="")
-          
-          if [i, n] in self.erreure:
-              print(f"{Fore.RED}●{Fore.RESET} ")
-          elif [i, n] in self.choix:
-              print(f"{Fore.GREEN}●{Fore.RESET} ")
-          else:
-              print("O ")
+            for j in range(n):
+                #Si une case ne verifie pas les conditions du jeu, ses coins seront affichés en Rouge
+                if [i, j] in self.erreure:
+                    print(f"{Fore.RED}●{Fore.RESET}---", end="")
+                #Si un coin d'case est choisie par le joueur, et n'est pas une case erreure, sera affiché en Vert
+                elif [i, j] in self.choix:
+                    print(f"{Fore.GREEN}●{Fore.RESET}---", end="")
+                #Les coins normaux
+                else:
+                    print("O---", end="")
+            
+            if [i, n] in self.erreure:
+                print(f"{Fore.RED}●{Fore.RESET} ")
+            elif [i, n] in self.choix:
+                print(f"{Fore.GREEN}●{Fore.RESET} ")
+            else:
+                print("O ")
 
-          print("    ", end="")
-          for j in range(n):
-              print(f"| {self.tableau[i][j]} ", end="")
+            print("    ", end="")
+            for j in range(n):
+                print(f"| {self.tableau[i][j]} ", end="")
 
-          print("| ")
-      
-      print('{:2d}'.format(next(k)), end="  ")
-      for j in range(n):
-          if [n, j] in self.erreure:
-              print(f"{Fore.RED}●{Fore.RESET}---", end="")
-          elif [n, j] in self.choix:
-              print(f"{Fore.GREEN}●{Fore.RESET}---", end="")
-          else:
-              print("O---", end="")
-      if [n, n] in self.erreure:
-          print(f"{Fore.RED}●{Fore.RESET} ")
-      elif [n, n] in self.choix:
-          print(f"{Fore.GREEN}●{Fore.RESET} ")
-      else:
-          print("O ")
+            print("| ")
+        
+        print('{:2d}'.format(next(k)), end="  ")
+        for j in range(n):
+            if [n, j] in self.erreure:
+                print(f"{Fore.RED}●{Fore.RESET}---", end="")
+            elif [n, j] in self.choix:
+                print(f"{Fore.GREEN}●{Fore.RESET}---", end="")
+            else:
+                print("O---", end="")
+        if [n, n] in self.erreure:
+            print(f"{Fore.RED}●{Fore.RESET} ")
+        elif [n, n] in self.choix:
+            print(f"{Fore.GREEN}●{Fore.RESET} ")
+        else:
+            print("O ")
 
-    '''
-    Une fonction qui verifie que le nbr de Coins choisis ne depasse pas la valeur de la case correspondante
-    '''
     def verifier_case(self, i, j):
-  
-      nbr_coins = 0
-   
-      #Variable bool utilisé pour détecter si le jeu est fini 
-      fin = True
 
-      #On doit verifier les 4 coins de chaque case
-      cases_a_verifier = [[i, j], [i, j+1], [i+1, j], [i+1, j+1]]
-      
-      #Pour stocker les cases choisis parmi les cases à vérifier
-      cases_existante = []
-      for case in cases_a_verifier:
-        if case in self.choix:
-          cases_existante.append(case)
-          nbr_coins += 1
-      
-      #Si le nbr_coins choisis plus grand que la valeur de la case, alors c'est une cse erreure
-      if nbr_coins > int(self.tableau[i][j]):
-        self.erreure.extend(cases_existante)
+        '''
+        Une fonction qui verifie que le nbr de Coins choisis ne depasse pas la valeur de la case correspondante
 
-      #quand le nbr_coins == valeur de la case, alors ce case est fini. Et la fonction verifier_tableau, verifie si chaque case est finie alors le jeu est fini 
-      if nbr_coins < int(self.tableau[i][j]):
-        fin = False
+        :param i: indice ligne
+        :param j: indice colonne
 
-      return fin
+        :return bool: True si le cases est fini (Nbr coins cochés égale à la valeur du la case)
+        :return bool: False si le case n'est pas encore fini
+        '''
+
+        nbr_coins = 0
+
+        #Variable bool utilisé pour détecter si le jeu est fini 
+        fin = True
+
+        #On doit verifier les 4 coins de chaque case
+        cases_a_verifier = [[i, j], [i, j+1], [i+1, j], [i+1, j+1]]
+        
+        #Pour stocker les cases choisis parmi les cases à vérifier
+        cases_existante = []
+        for case in cases_a_verifier:
+            if case in self.choix:
+                cases_existante.append(case)
+                nbr_coins += 1
+        
+        #Si le nbr_coins choisis plus grand que la valeur de la case, alors c'est une cse erreure
+        if nbr_coins > int(self.tableau[i][j]):
+            self.erreure.extend(cases_existante)
+
+        #quand le nbr_coins == valeur de la case, alors ce case est fini. Et la fonction verifier_tableau, verifie si chaque case est finie alors le jeu est fini 
+        if nbr_coins < int(self.tableau[i][j]):
+            fin = False
+
+        return fin
     
-    '''
-    Une fonction qui verifie que le tableau ne contient pas une case interdite. Elle utilise la fonction verifier_case
-    '''
     def verifier_tableau(self):
+        '''
+        Une fonction qui verifie que le tableau ne contient pas une case interdite. Elle utilise la fonction verifier_case
+        '''
+        self.erreure = []
+        
+        #Une liste qui contienne un "bool" qui dit si chaque case est finie ou non. Si tous les cases sont finies alors le jeu est fini
+        fin = []
 
-      self.erreure = []
-      #Une liste qui contienne un "bool" qui dit si chaque case est finie ou non. Si tous les cases sont finies alors le jeu est fini
-      fin = []
+        for i in range(self.dimension):
 
-      for i in range(self.dimension):
+            for j in range(self.dimension):
+                #On ajoute le "bool" renvoyé dans la liste fin
+                fin.append(self.verifier_case(i, j))
 
-        for j in range(self.dimension):
-          #On ajoute le "bool" renvoyé dans la liste fin
-          fin.append(self.verifier_case(i, j))
+        #Si tous les cases sont True (case finie), all(fin) renvoie True
+        return all(fin)
 
-      #Si tous les cases sont True (case finie), all(fin) renvoie True
-      return all(fin)
-
-    '''
-    Si le joueur a choisi de jouer de nouveau, Une fonction qui redamarre le jeu
-    '''
     def restart(self):
-       #Pour re-initialiser tous les listes et les variables
+        '''
+        Si le joueur a choisi de jouer de nouveau, Une fonction qui redamarre le jeu
+        '''
+        #Pour re-initialiser tous les listes et les variables
         self.choix = []
         self.erreure = []
 
@@ -201,7 +206,7 @@ class Squaro:
 
         while (not dim.isdigit() or int(dim) > 15):
             dim = input('\nEntrez la dimension voulue:(max 15) ')
-    
+
         self.dimension = int(dim)
         self.generateur.dimension = int(dim)
 
@@ -210,10 +215,14 @@ class Squaro:
         self.afficher_tableau(self.dimension)
         self.play()
 
-    '''
-    Une fonction qui est utilisée en mode est 'play' et qui permette à valider le choix de l'utilisteur
-    '''
     def valider_choix(self, choice):
+        '''
+        Une fonction qui est utilisée en mode 'play' et qui permette à valider le choix de l'utilisteur
+        
+        :param choice: Le choix de l'utilisateur
+        
+        :return bool: True si le choix est validé
+        '''
 
         if len(choice) == 0:
             return False
@@ -239,11 +248,10 @@ class Squaro:
 
         return True
 
-    '''
-    La fonction qui demarre le jeu en mode 'play' 
-    '''
     def play(self):
-      
+        '''
+        La fonction qui demarre le jeu en mode 'play' 
+        '''      
         game = True
       
         print("\nParamètres d'entrée: ")
@@ -321,10 +329,15 @@ class Squaro:
                     print("\n\nAu revoir ...\n")
                     exit(2)
 
-    '''
-    Avoir la case qui correspond au coin coché du solution du tableau DIMACS
-    '''    
     def recuperer_cases_dimacs(self, dimacs_tableau, entier):
+        '''
+        Avoir la case qui correspond au coin coché du solution du tableau DIMACS
+
+        :param dimacs_tableau: La grille avec les cases au format DIMACS
+        :param entier: entier qui corresponde au nom du coin dans le tableau DIMACS
+        
+        :return liste: les indices du l'entier specifié
+        '''    
 
         liste = ["{},{}".format(index1,index2) for index1,value1 in enumerate(dimacs_tableau) for index2,value2 in enumerate(value1) if value2==entier]
         
@@ -333,10 +346,11 @@ class Squaro:
         return liste
 
 
-    '''
-    La fonction qui affiche la solution du jeu     
-    '''
     def afficher_solution(self):
+
+        '''
+        La fonction qui affiche la solution du jeu     
+        '''
 
         self.solver.solve_SAT(self.fichier_dimacs)
         self.solutions = self.solver.solutions
@@ -363,11 +377,16 @@ class Squaro:
                 liste = self.recuperer_cases_dimacs(dimacs_tableau, int(str(elem)[2:]))
                 self.choix.append(liste)
 
+            #Affichier le tableau avec solution
             self.afficher_tableau(self.dimension)
 
+            #Changer l'extension du fichier au format sat
             fichier = self.output + str(count) + ".sat"
+
+            #Ecrire la solution SAT dans le fichier
             self.solver.ecrire_fichier_SAT(self.dimension, self.choix, fichier)
             print(f"\n*** La solution SAT est ecrite dans le fichier: {fichier} ***\n")
 
 
             count += 1
+
