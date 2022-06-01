@@ -8,7 +8,7 @@ Ce projet permet de générer et résoudre des plateaux du jeu Squaro en utilisa
 
 ## Authors
 
-- [MAFADI Ziad](https://github.com/ZiadMafadi)
+- [MAFADI Ziad](https://github.com/ZMHarb)
 - [ALSABR Ibrahim](https://github.com/IbrahimAlsabr)
 - VITTET Brice
 
