@@ -18,7 +18,7 @@ Ce projet permet de générer et résoudre des plateaux du jeu Squaro en utilisa
 
 
 ```bash
-  git clone https://github.com/ZiadMafadi/Jeu-de-SquarO.git
+  git clone https://github.com/ZMHarb/Jeu-de-SquarO.git
   cd Jeu-de-SquarO
 ```
 
