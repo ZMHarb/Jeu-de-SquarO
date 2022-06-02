@@ -45,8 +45,8 @@ if not args.tableau and not args.dimension:
 if not args.mode:
   parser.error("Specifer le mode souhaité ['play' ou 'autosolve']. Utilisez --help pour plus d'informations")
 
-if args.dimension and int(args.dimension) > 40:
-  parser.error("La dimension maximale du tableau est 40. Utilisez --help pour plus d'informations")
+if args.dimension and int(args.dimension) > 25:
+  parser.error("La dimension maximale du tableau est 25. Utilisez --help pour plus d'informations")
 
 
 game = Squaro(args.dimension, args.output, args.tableau)
