@@ -73,13 +73,19 @@ class Tableau:
       if len(liste[-1]) == 0:
         liste.pop()
 
+    
+      valid = False
       #Si la dimension donnée n'est pas un chiffre
       if liste[0].isdigit():
-        self.dimension = int(liste[0])
-      else:
-        print("Le format du fichier donné n'est pas convenable.\nLa dimension doit être un entier <= 40.\nUtilisez --help pour plus d'informations")
+        valid = True
+        if (int(liste[0]) > 25):
+          valid = False
+      if not valid:
+        print("\nLe format du fichier donné n'est pas convenable.\nLa dimension doit être un entier <= 25.\nUtilisez --help pour plus d'informations")
         exit(1)
 
+      self.dimension = int(liste[0])
+      
       plateau.extend(liste[1:])
 
       #Transformer le tableau en liste double
